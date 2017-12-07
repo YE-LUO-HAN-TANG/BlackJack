@@ -33,9 +33,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resource\icon\icon~1.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.1.953, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,7 +65,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="UIControl\CardConventer.cs" />
+    <Compile Include="UIControl\DealerPositionUI.xaml.cs">
+      <DependentUpon>DealerPositionUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIControl\GameResultConverter.cs" />
+    <Compile Include="UIControl\PlayerPositionUI.xaml.cs">
+      <DependentUpon>PlayerPositionUI.xaml</DependentUpon>
+    </Compile>
+    <Page Include="UIControl\DealerPositionUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -62,12 +85,29 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="System\BJNotify.cs" />
+    <Compile Include="System\BlackJackException.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIControl\PlayerPositionUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\BJHouse.cs" />
+    <Compile Include="Models\BJPlayerInfo.cs" />
+    <Compile Include="Models\BJTable.cs" />
+    <Compile Include="Models\BJDealer.cs" />
+    <Compile Include="Models\BJPlayer.cs" />
+    <Compile Include="Models\BJTableDealerPosition.cs" />
+    <Compile Include="Models\BJTablePlayerPositon.cs" />
+    <Compile Include="Models\BJTablePosition.cs" />
+    <Compile Include="Models\Casino.cs" />
+    <Compile Include="Models\Poker.cs" />
+    <Compile Include="Models\PokerCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -85,13 +125,81 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Poker\C1.png" />
+    <Resource Include="Resource\Poker\C10.png" />
+    <Resource Include="Resource\Poker\C11.png" />
+    <Resource Include="Resource\Poker\C12.png" />
+    <Resource Include="Resource\Poker\C13.png" />
+    <Resource Include="Resource\Poker\C2.png" />
+    <Resource Include="Resource\Poker\C3.png" />
+    <Resource Include="Resource\Poker\C4.png" />
+    <Resource Include="Resource\Poker\C5.png" />
+    <Resource Include="Resource\Poker\C6.png" />
+    <Resource Include="Resource\Poker\C7.png" />
+    <Resource Include="Resource\Poker\C8.png" />
+    <Resource Include="Resource\Poker\C9.png" />
+    <Resource Include="Resource\Poker\D1.png" />
+    <Resource Include="Resource\Poker\D10.png" />
+    <Resource Include="Resource\Poker\D11.png" />
+    <Resource Include="Resource\Poker\D12.png" />
+    <Resource Include="Resource\Poker\D13.png" />
+    <Resource Include="Resource\Poker\D2.png" />
+    <Resource Include="Resource\Poker\D3.png" />
+    <Resource Include="Resource\Poker\D4.png" />
+    <Resource Include="Resource\Poker\D5.png" />
+    <Resource Include="Resource\Poker\D6.png" />
+    <Resource Include="Resource\Poker\D7.png" />
+    <Resource Include="Resource\Poker\D8.png" />
+    <Resource Include="Resource\Poker\D9.png" />
+    <Resource Include="Resource\Poker\H1.png" />
+    <Resource Include="Resource\Poker\H10.png" />
+    <Resource Include="Resource\Poker\H11.png" />
+    <Resource Include="Resource\Poker\H12.png" />
+    <Resource Include="Resource\Poker\H13.png" />
+    <Resource Include="Resource\Poker\H2.png" />
+    <Resource Include="Resource\Poker\H3.png" />
+    <Resource Include="Resource\Poker\H4.png" />
+    <Resource Include="Resource\Poker\H5.png" />
+    <Resource Include="Resource\Poker\H6.png" />
+    <Resource Include="Resource\Poker\H7.png" />
+    <Resource Include="Resource\Poker\H8.png" />
+    <Resource Include="Resource\Poker\H9.png" />
+    <Resource Include="Resource\Poker\L1.png" />
+    <Resource Include="Resource\Poker\L2.png" />
+    <Resource Include="Resource\Poker\S1.png" />
+    <Resource Include="Resource\Poker\S10.png" />
+    <Resource Include="Resource\Poker\S11.png" />
+    <Resource Include="Resource\Poker\S12.png" />
+    <Resource Include="Resource\Poker\S13.png" />
+    <Resource Include="Resource\Poker\S2.png" />
+    <Resource Include="Resource\Poker\S3.png" />
+    <Resource Include="Resource\Poker\S4.png" />
+    <Resource Include="Resource\Poker\S5.png" />
+    <Resource Include="Resource\Poker\S6.png" />
+    <Resource Include="Resource\Poker\S7.png" />
+    <Resource Include="Resource\Poker\S8.png" />
+    <Resource Include="Resource\Poker\S9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\icon\icon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\PokerBackGround\Blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\icon\icon~1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

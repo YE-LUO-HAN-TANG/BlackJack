@@ -1,0 +1,208 @@
+﻿<Window x:Class="BlackJack.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BlackJack"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ui="clr-namespace:BlackJack.UIControl"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+        Icon="../Resource/icon/icon.jpg"
+        Title="BlackJack" Height="800" Width="494.4"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ui:GameResultConverter x:Key="GameResultConverter" />
+    </Window.Resources>
+    <Grid Background="Green">
+        <materialDesign:Snackbar x:Name="BJSnackbar">
+            <materialDesign:SnackbarMessage x:Name="BJMessage" ActionContent="知道了" ActionClick="MessageClose" />
+        </materialDesign:Snackbar>
+        <materialDesign:DialogHost x:Name="GameResultDialog">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16">
+                    <Border>
+
+                        <TextBlock x:Name="GameResult"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="25"
+                                   Text="{Binding Path=GameResult,Converter={StaticResource GameResultConverter}}" />
+                    </Border>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button
+                            Margin="0,8,8,0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            IsDefault="True"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Click="ReplayClick">
+                            REPLAY
+                        </Button>
+                        <Button
+                            Margin="0,8,8,0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            IsCancel="True"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Click="ExitClick">
+                            EXIT
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Right">
+                    <Border ToolTip="玩家资金" HorizontalAlignment="Center" Background="LightGoldenrodYellow"
+                            CornerRadius="10" BorderThickness="3" Height="50" Width="75" BorderBrush="Gray">
+                        <Border.Child>
+                            <TextBlock x:Name="MoneyBlock" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       Margin="8 8 8 8" FontSize="20" FontWeight="Bold"
+                                       Text="{Binding Path=Chip, StringFormat={}{0:,$.}}" />
+                        </Border.Child>
+
+                    </Border>
+                </StackPanel>
+
+                <materialDesign:Transitioner x:Name="TotalTransitoner" Grid.Row="1"
+                                             AutoApplyTransitionOrigins="True"
+                                             SelectedIndex="0">
+                    <materialDesign:TransitionerSlide>
+                        <materialDesign:TransitionerSlide.OpeningEffect>
+                            <materialDesign:TransitionEffect Kind="ExpandIn" Duration="0:0:1" />
+                        </materialDesign:TransitionerSlide.OpeningEffect>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="250" />
+                                <RowDefinition Height="290" />
+                                <RowDefinition Height="121.6" />
+                            </Grid.RowDefinitions>
+                            <Grid Row="1">
+                                <Border ToolTip="当前赌注" HorizontalAlignment="Center" Background="White"
+                                        CornerRadius="10" BorderThickness="3" Height="50" Width="75" BorderBrush="Gray">
+
+                                    <Border.Child>
+                                        <TextBlock x:Name="StakeBlock" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center" Margin="8 8 8 8" FontSize="20"
+                                                   FontWeight="Bold"
+                                                   Text="{Binding Path=Stake, StringFormat={}{0:,$.}}" />
+                                    </Border.Child>
+
+                                </Border>
+                            </Grid>
+                            <Grid Row="2" Width="300">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" x:Name="PrepareButton"
+                                        Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                                        ToolTip="准备完成"
+                                        Click="PrepareClick">
+                                    <materialDesign:PackIcon Height="24" Width="24" Kind="Check" />
+                                </Button>
+                                <Button Grid.Column="1" x:Name="CancelButton"
+                                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                                        ToolTip="撤销加注" Click="CancelStake">
+                                    <materialDesign:PackIcon
+                                        Height="24"
+                                        Width="24"
+                                        Kind="Close" />
+                                </Button>
+                                <materialDesign:PopupBox x:Name="StakePopupBox" Grid.Column="2"
+                                                         HorizontalAlignment="Center"
+                                                         PlacementMode="RightAndAlignMiddles"
+                                                         Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                                         ToggleCheckedContentCommandParameter="wowsers"
+                                                         ToolTipService.Placement="Bottom"
+                                                         ToolTip="加注"
+                                                         UnfurlOrientation="Vertical">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Height="24" Width="24" Kind="Chip" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PopupBox.ToggleCheckedContent>
+                                        <materialDesign:PackIcon
+                                            Width="24"
+                                            Height="24"
+                                            Kind="Plus" />
+                                    </materialDesign:PopupBox.ToggleCheckedContent>
+                                    <StackPanel>
+                                        <Button x:Name="Add10Button" ToolTip="加注10" ToolTipService.Placement="Right"
+                                                Click="Add10">
+                                            $10
+                                        </Button>
+                                        <Button x:Name="Add50Button" ToolTip="加注50" ToolTipService.Placement="Right"
+                                                Click="Add50">
+                                            $50
+                                        </Button>
+                                        <Button x:Name="Add100Button" ToolTip="加注100" ToolTipService.Placement="Right"
+                                                Click="Add100">
+                                            $100
+                                        </Button>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </Grid>
+                        </Grid>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide>
+                        <materialDesign:TransitionerSlide.OpeningEffect>
+                            <materialDesign:TransitionEffect Kind="ExpandIn" Duration="0:0:1" />
+                        </materialDesign:TransitionerSlide.OpeningEffect>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="250" />
+                                <RowDefinition Height="290" />
+                                <RowDefinition Height="121.6" />
+                            </Grid.RowDefinitions>
+                            <ui:DealerPositionUI Grid.Row="0" x:Name="DealerPositionUi" />
+                            <ui:PlayerPositionUI Grid.Row="1" x:Name="PlayerPositionUi" VerticalAlignment="Bottom" />
+
+                            <Grid Grid.Row="2" Width="300">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" x:Name="StandButton"
+                                        Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                        ToolTip="结束抽牌"
+                                        Click="StandClick">
+                                    <materialDesign:PackIcon Height="24" Width="24" Kind="Check" />
+                                </Button>
+                                <Button Grid.Column="1" x:Name="DoubleButton"
+                                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+
+                                        ToolTip="双倍加注并抽一张牌" Click="DoubleClick">
+                                    <materialDesign:PackIcon Opacity="0.5" Height="24" Width="24" Kind="Chip" />
+                                </Button>
+                                <Button Grid.Column="2" x:Name="HitButton"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="抽一张牌"
+                                        Click="HitClick">
+                                    <materialDesign:PackIcon
+                                        Height="24"
+                                        Width="24"
+                                        Kind="Cards" />
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </Grid>
+        </materialDesign:DialogHost>
+    </Grid>
+</Window>
